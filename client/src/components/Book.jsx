@@ -7,12 +7,12 @@ class Book extends Component {
   }
 
   saveBook() {
-    console.log('saveBook called')
     $.ajax({
-      url: '/users',
+      url: '/users/books',
       method: 'POST',
       data: {
-        user: this.props.currentUser
+        user: this.props.currentUser,
+        book: this.props.book
       },
       success: (data) => {
         console.log('successful post to server')

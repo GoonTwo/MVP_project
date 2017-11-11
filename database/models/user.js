@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 var userSchema = mongoose.Schema({
   _id: Schema.Types.ObjectId,
-  name: String,
+  name: { type: String, required: true, index: { unique: true } },
   books: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
 });
 

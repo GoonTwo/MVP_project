@@ -33,10 +33,21 @@ class App extends Component {
 
   handleAddUser(newUser) {
     this.setState((prevState) => {
-      return {users: prevState.users.concat([newUser])}
-    })
+      return {users: prevState.users.concat([newUser]), currentUser: newUser}
+    }, () => {
+      console.log('user: ', this.state.currentUser);
+      $.ajax({
+        url: '/users',
+        method: 'POST',
+        data: {
+          user: this.state.currentUser
+        },
+        success: (data) => {
+          console.log('successful post to server')
+        }
+      })
+    });
 
-    // send post request to /users
   }
 
   handleSelect(user) {
@@ -48,7 +59,8 @@ class App extends Component {
       <div>
         <Search searchBooks={this.searchBooks.bind(this)}/>
         <Details 
-          users={this.state.users} 
+          users={this.state.users}
+          curentUser={this.state.currentUser} 
           handleAddUser={this.handleAddUser.bind(this)}
           handleSelect={this.handleSelect.bind(this)}
         />

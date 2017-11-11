@@ -1,24 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class Details extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userText: '',
-      selected: ''
+      selectValue: ''
     }
   }
 
-  onSelect(e) {
-    this.setState({ selected: e.target.value }, () => {
-      this.props.handleSelect(this.state.selected);
-    }); 
+  handleChange(e) {
+    this.setState({ selectValue: e.target.value });
   }
 
   onClick(e) {
-    this.setState((state, props) => { return { selected: state.userText }}, () => {
-      this.props.handleSelect(this.state.selected);
-    })
+    this.props.handleSelect(this.state.selectValue);
     this.setState({ userText: '' });
     this.props.handleAddUser(this.state.userText); 
   }
@@ -44,8 +40,8 @@ export default class Details extends Component {
         </button>
 
         <select 
-          value={this.state.selected}
-          onChange={this.onSelect.bind(this)}
+          value={this.props.currentUser}
+          onChange={this.handleChange.bind(this)}
         >
           {options}
         </select>

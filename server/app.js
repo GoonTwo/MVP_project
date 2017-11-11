@@ -28,10 +28,33 @@ app.get('/books', function(req, res) {
 })
 
 app.post('/users', function(req, res) {
-  console.log('request body', req.body)
-  var username = req.body.username;
-  // db.saveUser(usernmae)
-  res.send('you made it!');
+  var username = req.body.user;
+  db.saveUser(username)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      console.log('there was an erroe on saving')
+    })
+});
+
+app.post('/users/books', function (req, res) {
+  console.log('BODY --->', req.body)
+  var username = req.body.user;
+  var book = req.body.book;
+  
+  // ------------------------------- //
+  // START HERE BUDDDY!! YOU CAN DO IT!!!
+  // ------------------------------- //
+
+  db.saveBook(username, book)
+    .then((data) => {
+      console.log('saved book data to a user')
+      //res.json(data);
+    })
+    .catch((err) => {
+      console.log('there was an erroe on saving')
+    })
 });
 
 module.exports = app;
