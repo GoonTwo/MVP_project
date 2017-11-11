@@ -10,8 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
       books: [],
-      users: [],
-      currentUser: ''
+      users: ['danny'],
+      currentUser: 'danny'
     }
   }
 

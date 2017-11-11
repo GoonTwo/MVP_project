@@ -24,25 +24,26 @@ const saveUser = (username) => {
   return newUser.save()
 };
 
-const saveBook = (username, book) => {
-
-  User.find({name: username }).exec()
+const saveBook = (info) => {
+  if (!info.user) throw book;
+  return Book.findOne({etag: info.book.etag }).exec()
+  .then((book) => {
+    // if book exists, get book _id and add to user
+    book._id
+    // if book doesn't exist, make new book in db and save
+  })
   .then((user) => {
       let newBook = new Book({
         _id: mongoose.Types.ObjectId(),
         user: user._id,
-        etag: book.id,
-        title: book.title,
-        Author: booke.author,
-        description: book.description,
-        pageCount: book.pageCount,
-        imageUrl: book.imageUrl,
+        etag: info.book.etag,
+        title: info.book.title,
+        Author: info.book.authors.join(' '),
+        pageCount: info.book.pageCount,
+        imageUrl: info.book.imageUrl,
+        description: info.book.description
       })
-     user.books.push(newBook)
-     return user.save();
-   })
-   .catch(() => {
-
+     return newBook.save();
    })
 };
 

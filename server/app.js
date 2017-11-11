@@ -8,7 +8,7 @@ const publicPath = path.join(__dirname + '/../client/dist');
 const db = require('../database/index')
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(publicPath));
 app.use('/static', express.static(publicPath));
 app.use(morgan('tiny'));
@@ -39,21 +39,13 @@ app.post('/users', function(req, res) {
 });
 
 app.post('/users/books', function (req, res) {
-  console.log('BODY --->', req.body)
-  var username = req.body.user;
-  var book = req.body.book;
-  
-  // ------------------------------- //
-  // START HERE BUDDDY!! YOU CAN DO IT!!!
-  // ------------------------------- //
-
-  db.saveBook(username, book)
+  db.saveBook(req.body)
     .then((data) => {
-      console.log('saved book data to a user')
+      console.log('saved book data to a user', data)
       //res.json(data);
     })
     .catch((err) => {
-      console.log('there was an erroe on saving')
+      console.log('there was an error on saving', err)
     })
 });
 
