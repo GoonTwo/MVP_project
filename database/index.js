@@ -1,53 +1,54 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://danny:danny@ds259105.mlab.com:59105/bookshelf_hr');
-mongoose.Promise = require('bluebird');
-
-
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-
-db.once('open', () => {
-  console.log('connected to MongoDB')
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('bookshelf', 'root', '1488115-d', {
+  dialect: 'mysql'
 });
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 // MODELS
 const User = require('./models/user');
 const Book = require('./models/book');
 
+User.belongsToMany(Book, { through: 'BookUser' });
+Book.belongsToMany(User, { through: 'BookUser' });
+
+sequelize.sync();
+
+// CREATE SAMPLE DATA
+Book.create({ etag: '3grsd', 
+title: 'harry potter', 
+author: 'J.K. Rowling', 
+description: 'some desciption about stuff',
+pageCount: 566,
+imageUrl: 'https://www.someurl.com'
+ }).then(book => {
+  // you can now access the newly created task via the variable task
+  console.log('BOOK :', book)
+})
+
+User.create({ name: 'Danny Welstad'}).then(user => {
+  // you can now access the newly created task via the variable task
+  console.log('USER :', user)
+})
+
 // Helper Functions
 const saveUser = (username) => {
-  let newUser = new User({
-      _id: mongoose.Types.ObjectId(),
-      name: username,
-  }); 
-  return newUser.save()
+
 };
 
 const saveBook = (info) => {
-  if (!info.user) throw book;
-  return Book.findOne({etag: info.book.etag }).exec()
-  .then((book) => {
-    // if book exists, get book _id and add to user
-    book._id
-    // if book doesn't exist, make new book in db and save
-  })
-  .then((user) => {
-      let newBook = new Book({
-        _id: mongoose.Types.ObjectId(),
-        user: user._id,
-        etag: info.book.etag,
-        title: info.book.title,
-        Author: info.book.authors.join(' '),
-        pageCount: info.book.pageCount,
-        imageUrl: info.book.imageUrl,
-        description: info.book.description
-      })
-     return newBook.save();
-   })
+
 };
 
 module.exports.saveUser = saveUser;
 module.exports.saveBook = saveBook;
+module.exports.sequelize = sequelize;
 
 

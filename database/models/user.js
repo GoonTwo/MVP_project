@@ -1,12 +1,8 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
-var userSchema = mongoose.Schema({
-  _id: Schema.Types.ObjectId,
-  name: { type: String, required: true, index: { unique: true } },
-  books: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
+const db = require('../index');
+const Sequelize = require('sequelize');
+console.log(db)
+const User = db.sequelize.define('user', {
+  name: { type: Sequelize.STRING, unique: true },
 });
-
-var User = mongoose.model('User', userSchema);
 
 module.exports = User;

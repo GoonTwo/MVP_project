@@ -1,17 +1,13 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const db = require('../index');
+const Sequelize = require('sequelize');
 
-var bookSchema = mongoose.Schema({
-  _id: Schema.Types.ObjectId,
-  user: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  etag: { type: String, index: { unique: true } },
-  title: String,
-  Author: String,
-  description: String,
-  pageCount: Number,
-  imageUrl: String,
+const Book = db.sequelize.define('book', {
+  etag: { type: Sequelize.STRING, unique: true }, //unique for each book
+  title: { type: Sequelize.STRING },
+  author: { type: Sequelize.STRING },
+  description: { type: Sequelize.STRING },
+  pageCount: { type: Sequelize.NUMBER },
+  imageUrl: { type: Sequelize.STRING },
 });
-
-var Book = mongoose.model('Book', bookSchema);
 
 module.exports = Book;
