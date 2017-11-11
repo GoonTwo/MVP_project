@@ -1,0 +1,9 @@
+body {
+  background: #d1e2ff;
+}
+
+.bookItem {
+  display: inline-block;
+  width: 25%;
+  padding: 20px;
+}
