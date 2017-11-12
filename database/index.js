@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize('bookshelf', 'root', '1488115-d', {
   dialect: 'mysql'
 });
+module.exports.sequelize = sequelize;
 
 sequelize
   .authenticate()
@@ -19,36 +20,44 @@ const Book = require('./models/book');
 User.belongsToMany(Book, { through: 'BookUser' });
 Book.belongsToMany(User, { through: 'BookUser' });
 
-sequelize.sync();
-
-// CREATE SAMPLE DATA
-Book.create({ etag: '3grsd', 
-title: 'harry potter', 
-author: 'J.K. Rowling', 
-description: 'some desciption about stuff',
-pageCount: 566,
-imageUrl: 'https://www.someurl.com'
- }).then(book => {
-  // you can now access the newly created task via the variable task
-  console.log('BOOK :', book)
-})
-
-User.create({ name: 'Danny Welstad'}).then(user => {
-  // you can now access the newly created task via the variable task
-  console.log('USER :', user)
-})
+sequelize.sync({force: true});
 
 // Helper Functions
 const saveUser = (username) => {
-
+  return User.create({ name: username })
 };
 
 const saveBook = (info) => {
-
+  var description = info.book.description.substring(0, 100);
+  return Book.create({
+    etag: info.book.etag,
+    title: info.book.title,
+    author: info.book.authors[0],
+    pageCount: info.book.pageCount,
+    imageUrl: info.book.imageUrl,
+    description: description
+  })
+    .then(book => {
+      return User.findOne({where: {name: info.user}})
+      .then((user) => {
+        console.log('FOUND USER: ', user)
+        return user.addBook(book);
+      })
+    })
+    .catch((err) => {
+      console.log('HIT THE CATCH', err)
+      return Book.findOne({where: {etag: info.book.etag}})
+      .then((book) => {
+        return User.findOne({where: {name: info.user }})
+        .then((user) => {
+          return user.addBook(book)
+        })
+      })
+      console.log('there was a creation error', err)
+    })
 };
 
 module.exports.saveUser = saveUser;
 module.exports.saveBook = saveBook;
-module.exports.sequelize = sequelize;
 
 

@@ -34,15 +34,15 @@ app.post('/users', function(req, res) {
       res.json(data);
     })
     .catch((err) => {
-      console.log('there was an erroe on saving')
+      console.log('there was an error on saving the user')
     })
 });
 
 app.post('/users/books', function (req, res) {
   db.saveBook(req.body)
     .then((data) => {
-      console.log('saved book data to a user', data)
-      //res.json(data);
+      console.log('saved book data to a user')
+      res.json(data);
     })
     .catch((err) => {
       console.log('there was an error on saving', err)
