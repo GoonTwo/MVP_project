@@ -38,6 +38,7 @@ const saveBook = (info) => {
     description: description
   })
     .then(book => {
+      console.log('LOOKING FOR USER: ', info.user)
       return User.findOne({where: {name: info.user}})
       .then((user) => {
         console.log('FOUND USER: ', user)
@@ -45,9 +46,10 @@ const saveBook = (info) => {
       })
     })
     .catch((err) => {
-      console.log('HIT THE CATCH', err)
+      console.log('HIT THE CATCH')
       return Book.findOne({where: {etag: info.book.etag}})
       .then((book) => {
+        
         return User.findOne({where: {name: info.user }})
         .then((user) => {
           return user.addBook(book)

@@ -10,12 +10,14 @@ export default class Details extends Component {
   }
 
   handleChange(e) {
-    this.setState({ selectValue: e.target.value });
+    console.log('im handling a change')
+    this.setState({ selectValue: e.target.value }, () => {
+      this.props.handleSelect(this.state.selectValue)
+    });
   }
 
   onClick(e) {
-    this.props.handleSelect(this.state.selectValue);
-    this.setState({ userText: '' });
+    this.setState((state, props) => { return { selectValue: state.userText, userText: '' }})
     this.props.handleAddUser(this.state.userText); 
   }
 
@@ -40,7 +42,7 @@ export default class Details extends Component {
         </button>
 
         <select 
-          value={this.props.currentUser}
+          value={this.state.selectValue}
           onChange={this.handleChange.bind(this)}
         >
           {options}

@@ -10,8 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
       books: [],
-      users: ['danny'],
-      currentUser: 'danny'
+      users: [],
+      currentUser: ''
     }
   }
 
@@ -32,6 +32,7 @@ class App extends Component {
   }
 
   handleAddUser(newUser) {
+    if (this.state.users.indexOf(newUser) >= 0) return;
     this.setState((prevState) => {
       return {users: prevState.users.concat([newUser]), currentUser: newUser}
     }, () => {
