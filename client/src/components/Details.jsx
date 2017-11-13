@@ -10,7 +10,6 @@ export default class Details extends Component {
   }
 
   handleChange(e) {
-    console.log('im handling a change')
     this.setState({ selectValue: e.target.value }, () => {
       this.props.handleSelect(this.state.selectValue)
     });
@@ -41,12 +40,14 @@ export default class Details extends Component {
           add user
         </button>
 
+
         <select 
           value={this.state.selectValue}
           onChange={this.handleChange.bind(this)}
         >
           {options}
         </select>
+        <a href={`/books/${this.props.currentUser}`}><button>See Favorites</button></a>
       </div>
     )
   }

@@ -59,7 +59,23 @@ const saveBook = (info) => {
     })
 };
 
+const getBooks = (user) => {
+  return Book.findAll({
+    include: [{
+      model: User,
+      where: { name: user }
+    }]
+  })
+}
+
+const getUsers = () => {
+  return User.findAll({
+    attributes: ['name']
+  })
+}
+
 module.exports.saveUser = saveUser;
 module.exports.saveBook = saveBook;
-
+module.exports.getBooks = getBooks;
+module.exports.getUsers = getUsers;
 
